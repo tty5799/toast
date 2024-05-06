@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useRef, useState } from 'react';
 import ToastController from './ToastController';
+import ReactDOM from 'react-dom/client';
 
 const ToastContext = createContext<{
   toastController: ToastController | null;
@@ -8,12 +9,26 @@ const ToastContext = createContext<{
 });
 
 const ToastProvider = ({ children }: { children: ReactNode }) => {
-  const [toastController] = useState(new ToastController());
+  const toastControllerRef = useRef<ToastController | null>(null);
+
+  let toastContainer = document.getElementById('total');
+
+  if (!toastContainer) {
+    toastContainer = document.createElement('div');
+    toastContainer.id = `total`;
+    document.body.appendChild(toastContainer);
+  }
+
+  ReactDOM.createRoot(toastContainer);
+
+  if (!toastControllerRef.current) {
+    toastControllerRef.current = new ToastController();
+  }
 
   return (
     <ToastContext.Provider
       value={{
-        toastController: toastController,
+        toastController: toastControllerRef.current,
       }}
     >
       {children}

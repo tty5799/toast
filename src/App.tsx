@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useToast } from './toast/ToastContext';
+import { ToastLayout } from './toast/ToastLayout';
 
 function App() {
   const toast = useToast();
 
   const handleToast = () => {
-    toast?.open('hello');
+    toast?.open(<div>hi</div>);
   };
 
   return (
